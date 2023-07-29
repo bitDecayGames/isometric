@@ -16,7 +16,10 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="960" fps="60" background="#000000" hardware="true" vsync="false" />
+	<!-- <window width="1280" height="960" fps="60" background="#000000" hardware="true" vsync="false" /> -->
+
+	<!-- If running in debug, this will give you a proper view of your cartesian space -->
+	<window width="2560" height="960" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="false" />
