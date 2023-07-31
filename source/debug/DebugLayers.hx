@@ -8,4 +8,5 @@ enum DebugLayers {
 	ISO_GRID;
 	ISO_SPACE;
 	GRID_SPACE;
+	GRAPH;
 }

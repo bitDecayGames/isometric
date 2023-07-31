@@ -4,16 +4,16 @@ import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import iso.IsoSprite;
 
-class Cube extends IsoSprite {
+class ExtraLongX extends IsoSprite {
 	public function new(X:Float, Y:Float) {
-		gridWidth = 1;
+		gridWidth = 4.5;
 		gridLength = 1;
 		gridHeight = 1;
 
 		super(X, Y);
-		color = FlxColor.GREEN;
+		color = FlxColor.GREEN.getLightened();
 
-		sprite = new FlxSprite(AssetPaths.Block_5x5x10__png);
-		sprite.offset.set(10, 20);
+		sprite = new FlxSprite(AssetPaths.Block_25x5x10__png);
+		sprite.offset.set(50, 40);
 	}
 }

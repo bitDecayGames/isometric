@@ -5,23 +5,38 @@ import debug.Debug;
 import debug.DebugLayers;
 import entities.Blade;
 import entities.Cube;
-import entities.Long;
+import entities.ExtraLongX;
+import entities.FloatingCube;
+import entities.LongX;
+import entities.LongY;
+import entities.SquareShadow;
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import iso.Grid;
 import iso.IsoSprite;
+import iso.Overlap;
+import topo.Tophographic.Topographic;
 
 class PlayState extends FlxState {
 	var cube:IsoSprite;
 	var blade:IsoSprite;
-	var long:IsoSprite;
+	var longY:IsoSprite;
+	var longX:IsoSprite;
+	var floater:IsoSprite;
+	var shadow:IsoSprite;
+	var extraLongX:IsoSprite;
 
-	var sortOrder = new FlxTypedGroup<IsoSprite>();
+	var graph:Topographic;
+	var collidables = new FlxTypedGroup<FlxObject>();
+
+	var mouseModeIso = false;
 
 	override public function create() {
 		super.create();
@@ -38,199 +53,165 @@ class PlayState extends FlxState {
 
 		cube = new Cube(10, 10);
 		blade = new Blade(30, 25);
-		long = new Long(10, 40);
+		longY = new LongY(10, 40);
+		longX = new LongX(40, 10);
+		extraLongX = new ExtraLongX(50, 50);
+		floater = new FloatingCube(60, 60);
+		shadow = new SquareShadow(floater);
+		add(shadow);
 
-		blade.immovable = true;
-		long.immovable = true;
+		// blade.immovable = true;
+		// longY.immovable = true;
+		// longX.immovable = true;
+		// floater.immovable = true;
 
-		sortOrder.add(cube);
-		sortOrder.add(blade);
-		sortOrder.add(long);
-		add(sortOrder);
+		graph = new Topographic([]);
+		add(graph);
+		graph.add(cube);
+		graph.add(blade);
+		graph.add(longY);
+		graph.add(longX);
+		graph.add(extraLongX);
+		graph.add(floater);
+		graph.rebuild();
+
+		collidables.add(cube);
+		collidables.add(blade);
+		collidables.add(longY);
+		collidables.add(longX);
+		collidables.add(extraLongX);
+		collidables.add(floater);
 
 		camera.scroll.set(-FlxG.camera.width / 2, -10);
 	}
 
 	var mTmp = FlxPoint.get();
-
-	var xAxis = Grid.gridToIso(100, 0);
-	var yAxis = Grid.gridToIso(0, 100);
+	var mIsoStart = FlxPoint.get();
+	var mIsoEnd = FlxPoint.get();
+	var mCartStart = FlxPoint.get();
+	var mCartEnd = FlxPoint.get();
 
 	override public function update(elapsed:Float) {
-		super.update(elapsed);
-
 		Grid.drawGrid(5, 5);
 
 		cube.debugDraw(1, FlxColor.GREEN);
+		extraLongX.debugDraw(1, FlxColor.GREEN.getLightened());
 		blade.debugDraw(2, FlxColor.RED);
-		long.debugDraw(3, FlxColor.YELLOW);
+		longY.debugDraw(3, FlxColor.YELLOW);
+		longX.debugDraw(4, FlxColor.BLUE);
+		floater.debugDraw(5, FlxColor.MAGENTA);
 
+		var rawPos = FlxG.mouse.getScreenPosition();
 		var mPos = FlxG.mouse.getPosition();
-
-		FlxG.watch.addQuick("Mouse grid pixel: ", Grid.isoToGrid(mPos.x, mPos.y, mTmp));
-
-		var start = FlxPoint.get();
-		var end = FlxPoint.get();
-		Grid.gridToIso(mTmp.x, 0, start);
-		Grid.gridToIso(mTmp.x, 50, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.BLUE);
-
-		Grid.gridToIso(0, mTmp.y, start);
-		Grid.gridToIso(50, mTmp.y, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.BLUE);
+		Grid.isoToGrid(mPos.x, mPos.y, mTmp);
+		FlxG.watch.addQuick("raw mouse Position: ", rawPos);
 
 		if (FlxG.mouse.pressed) {
+			if (rawPos.x < FlxG.width / 2) {
+				mouseModeIso = true;
+				FlxG.watch.addQuick("Mouse grid pixel: ", mTmp);
+			} else {
+				mouseModeIso = false;
+				FlxG.watch.addQuick("Mouse grid pixel: ", FlxG.mouse.getPositionInCameraView(Debug.dbgCam, mTmp));
+			}
 			if (FlxG.keys.pressed.ONE) {
 				cube.setPosition(mTmp.x, mTmp.y);
-			}
-			else if (FlxG.keys.pressed.TWO) {
+			} else if (FlxG.keys.pressed.TWO) {
 				blade.setPosition(mTmp.x, mTmp.y);
-			}
-			else if (FlxG.keys.pressed.THREE) {
-				long.setPosition(mTmp.x, mTmp.y);
+			} else if (FlxG.keys.pressed.THREE) {
+				longY.setPosition(mTmp.x, mTmp.y);
+			} else if (FlxG.keys.pressed.FOUR) {
+				longX.setPosition(mTmp.x, mTmp.y);
+			} else if (FlxG.keys.pressed.FIVE) {
+				floater.setPosition(mTmp.x, mTmp.y);
+			} else if (FlxG.keys.pressed.SIX) {
+				extraLongX.setPosition(mTmp.x, mTmp.y);
 			}
 		}
 
-		// sortOrder.sort(isoSort);
+		mouseDebugDraw();
 
 		if (FlxG.keys.pressed.W) {
 			cube.y -= 30 * elapsed;
 		}
-		else if (FlxG.keys.pressed.S) {
+		if (FlxG.keys.pressed.S) {
 			cube.y += 30 * elapsed;
 		}
-		else if (FlxG.keys.pressed.A) {
+		if (FlxG.keys.pressed.A) {
 			cube.x -= 30 * elapsed;
 		}
-		else if (FlxG.keys.pressed.D) {
+		if (FlxG.keys.pressed.D) {
 			cube.x += 30 * elapsed;
 		}
 
-		FlxG.collide(sortOrder, sortOrder);
+		// if (FlxG.keys.pressed.R) {
+		graph.rebuild();
+		// }
 
-		if (doSpritesOverlapInIsoSpace(long, cube)) {
-			if (isSpriteInFront(long, cube)) {
-				sortOrder.remove(long, true);
-				sortOrder.add(long);
-			}
-			else {
-				sortOrder.remove(cube, true);
-				sortOrder.add(cube);
-			}
+		graph.drawDebug();
+
+		FlxG.overlap(collidables, collidables, null, Overlap.isoCollide);
+		// FlxG.collide(collidables, collidables);
+
+		super.update(elapsed);
+	}
+
+	function mouseDebugDraw() {
+		if (FlxG.keys.justPressed.C) {
+			mIsoStart.set();
+			mIsoEnd.set();
+			mCartStart.set();
+			mCartEnd.set();
 		}
 
-		if (doSpritesOverlapInIsoSpace(cube, blade)) {
-			if (isSpriteInFront(cube, blade)) {
-				sortOrder.remove(cube, true);
-				sortOrder.add(cube);
-			}
-			else {
-				sortOrder.remove(blade, true);
-				sortOrder.add(blade);
-			}
+		if (FlxG.mouse.justPressedMiddle) {
+			mCartStart.copyFrom(mTmp);
+			Grid.gridToIso(mTmp.x, mTmp.y, mIsoStart);
 		}
 
-		if (doSpritesOverlapInIsoSpace(blade, long)) {
-			if (isSpriteInFront(blade, long)) {
-				sortOrder.remove(blade, true);
-				sortOrder.add(blade);
-			}
-			else {
-				sortOrder.remove(long, true);
-				sortOrder.add(long);
-			}
+		if (FlxG.mouse.pressedMiddle) {
+			mCartEnd.copyFrom(mTmp);
+			Grid.gridToIso(mTmp.x, mTmp.y, mIsoEnd);
 		}
+
+		if (mIsoStart.length > 0 && mIsoEnd.length > 0) {
+			DebugDraw.ME.drawWorldLine(mIsoStart.x, mIsoStart.y, mIsoEnd.x, mIsoEnd.y, null, FlxColor.PINK);
+			DebugDraw.ME.drawWorldLine(Debug.dbgCam, mCartStart.x, mCartStart.y, mCartEnd.x, mCartEnd.y, null, FlxColor.PINK);
+			FlxG.watch.addQuick("Line Length (Abs): ", Std.int(mCartStart.distanceTo(mCartEnd) * 100) / 100.0);
+			FlxG.watch.addQuick("Line Length (Cells): ", Std.int(mCartStart.distanceTo(mCartEnd) / Grid.CELL_SIZE * 10) / 10.0);
+		}
+
+		var start = FlxPoint.get();
+		var end = FlxPoint.get();
+		Grid.gridToIso(mTmp.x, -100, start);
+		Grid.gridToIso(mTmp.x, 100, end);
+		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+
+		Grid.gridToIso(-100, mTmp.y, start);
+		Grid.gridToIso(100, mTmp.y, end);
+		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
 	}
 
 	function isoSort(order:Int, a:IsoSprite, b:IsoSprite):Int {
-		if (doSpritesOverlapInIsoSpace(a, b)) {
-			if (isSpriteInFront(a, b)) {
+		if (Overlap.doSpritesOverlapInIsoSpace(a, b)) {
+			if (Overlap.isSpriteInFront(a, b)) {
 				return 1;
-			}
-			else if (isSpriteInFront(b, a)) {
+			} else if (Overlap.isSpriteInFront(b, a)) {
 				return -1;
-			}
-			else {
+			} else {
 				return 0;
 			}
-		}
-		else {
+		} else {
 			// TODO: Is this necessary? We may only care about sorting elements if there is overlap
 			// But we also might make things overall more efficient if we keep things sorted always
 			var tmpA = Grid.gridToIso(a.x, a.y);
 			var tmpB = Grid.gridToIso(b.x, b.y);
 			if (tmpA.y < tmpB.y) {
 				return -1;
-			}
-			else {
+			} else {
 				return 1;
 			}
 		}
 		return 0;
-	}
-
-	// returns true if blocks overlap on all 3 axes in iso projection space
-	function doSpritesOverlapInIsoSpace(a:IsoSprite, b:IsoSprite):Bool {
-		var aXMin = a.isoXmin;
-		var aXMax = a.isoXmax;
-		var aYMin = a.isoYmin;
-		var aYMax = a.isoYmax;
-		var aHMin = a.hMin;
-		var aHMax = a.hMax;
-
-		var bXMin = b.isoXmin;
-		var bXMax = b.isoXmax;
-		var bYMin = b.isoYmin;
-		var bYMax = b.isoYmax;
-		var bHMin = b.hMin;
-		var bHMax = b.hMax;
-
-		var xOverlap = !(aXMin >= bXMax || bXMin >= aXMax);
-		var yOverlap = !(aYMin >= bYMax || bYMin >= aYMax);
-		var zOverlap = !(aHMin >= bHMax || bHMin >= aHMax);
-
-		return xOverlap && yOverlap && zOverlap;
-
-		// Hexagons overlap if and only if all axis regions overlap.
-		// return ( // test if x regions intersect.
-		// 	!(a.gridXmin >= b.gridXmax || b.gridXmin >= a.gridXmax) && // test if y regions intersect.
-		// 	!(a.gridYmin >= b.gridYmax || b.gridYmin >= a.gridYmax) && // test if h regions intersect.
-		// 	!(a.hMin >= b.hMax || b.hMin >= a.hMax));
-	}
-
-	function isSpriteInFront(a:IsoSprite, b:IsoSprite) {
-		// test for intersection x-axis
-		// (larger x value is in front)
-		var aGXMin = a.gridXmin;
-		var bGXMax = b.gridXmax;
-		if (a.gridXmin >= b.gridXmax) {
-			return true;
-		}
-		else if (b.gridXmin >= a.gridXmax) {
-			return false;
-		}
-
-		// test for intersection y-axis
-		// (larger2 y value is in front)
-		if (a.gridYmin >= b.gridYmax) {
-			return true;
-		}
-		else if (b.gridYmin >= a.gridYmax) {
-			return false;
-		}
-
-		// // test for intersection z-axis
-		// // (higher z value is in front)
-		// if (a.gridZmin >= b.gridZmax)
-		// {
-		// 	return true;
-		// }
-		// else if (b.gridZmin >= a.gridZmax)
-		// {
-		// 	return false;
-		// }
-
-		// default response
-		return false;
 	}
 }

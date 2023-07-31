@@ -11,11 +11,18 @@ import flixel.util.FlxColor;
 class IsoSprite extends FlxSprite {
 	public var sprite:FlxSprite;
 
+	public var z:Float;
+
+	// an adjustment modifier when computing
+	// grid size to ensure rendering is nice.
+	// Objects are shrunk by this amount on
+	// all sides.
+	public static inline var adjust = 1;
+
 	// size of the block
 	public var gridWidth:Float;
 	public var gridLength:Float;
-	public var gridMinHeight:Float = 0;
-	public var gridMaxHeight:Float;
+	public var gridHeight:Float;
 
 	// these give the footprint of the block
 	public var gridXmin(get, never):Float;
@@ -33,7 +40,7 @@ class IsoSprite extends FlxSprite {
 	public var hMin(get, never):Float;
 	public var hMax(get, never):Float;
 
-	public function new(X:Float, Y:Float) {
+	public function new(X:Float = 0, Y:Float = 0) {
 		super(X, Y);
 
 		// It is critical that your grid size matches well with your `sprite` graphic so collisions feel correct
@@ -48,7 +55,7 @@ class IsoSprite extends FlxSprite {
 		super.draw();
 
 		// iso renders based on the bottom left corner
-		var tmp = Grid.gridToIso(x + width, y + height);
+		var tmp = Grid.gridToIso(x + width - z, y + height - z);
 		sprite.setPosition(tmp.x, tmp.y);
 		tmp.put();
 		var dbgDraw = FlxG.debugger.drawDebug;
@@ -58,51 +65,43 @@ class IsoSprite extends FlxSprite {
 	}
 
 	function get_gridXmin():Float {
-		// return x - (gridWidth * Grid.CELL_SIZE);
-		return x;
+		return x + adjust;
 	}
 
 	function get_gridXmax():Float {
-		// return x;
-		return x + (gridWidth * Grid.CELL_SIZE);
+		return x + (gridWidth * Grid.CELL_SIZE) - adjust;
 	}
 
 	function get_gridYmin():Float {
-		// return y - (gridLength * Grid.CELL_SIZE);
-		return y;
+		return y + adjust;
 	}
 
 	function get_gridYmax():Float {
-		// return y;
-		return y + (gridLength * Grid.CELL_SIZE);
+		return y + (gridLength * Grid.CELL_SIZE) - adjust;
 	}
 
 	function get_gridZmin():Float {
-		return gridMinHeight;
+		return z + adjust;
 	}
 
 	function get_gridZmax():Float {
-		return gridMaxHeight * Grid.CELL_SIZE;
+		return z + gridHeight * Grid.CELL_SIZE - adjust;
 	}
 
 	function get_isoXmin():Float {
-		// return x - ((gridWidth + gridMaxHeight) * Grid.CELL_SIZE);
-		return x + gridWidth * Grid.CELL_SIZE - ((gridWidth + gridMaxHeight) * Grid.CELL_SIZE);
+		return x - gridHeight * Grid.CELL_SIZE - z;
 	}
 
 	function get_isoXmax():Float {
-		// return x;
-		return x + gridWidth * Grid.CELL_SIZE;
+		return x + gridWidth * Grid.CELL_SIZE - z;
 	}
 
 	function get_isoYmin():Float {
-		// return y - ((gridLength + gridMaxHeight) * Grid.CELL_SIZE);
-		return y + gridLength * Grid.CELL_SIZE - ((gridLength + gridMaxHeight) * Grid.CELL_SIZE);
+		return y - gridHeight * Grid.CELL_SIZE - z;
 	}
 
 	function get_isoYmax():Float {
-		// return y;
-		return y + gridLength * Grid.CELL_SIZE;
+		return y + gridLength * Grid.CELL_SIZE - z;
 	}
 
 	function get_hMin():Float {
@@ -136,5 +135,12 @@ class IsoSprite extends FlxSprite {
 		end.put();
 
 		DebugDraw.ME.drawWorldLine(hMin, -i, hMax, -i, null, color);
+	}
+
+	public function centerPoint(?p:FlxPoint) {
+		if (p == null) {
+			p = FlxPoint.get();
+		}
+		return p.set(isoXmin + ((isoXmax - isoXmin) / 2), isoYmin + ((isoYmax - isoYmin) / 2));
 	}
 }
