@@ -8,7 +8,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 
-class IsoSprite extends FlxSprite {
+class IsoSprite extends FlxSprite implements IsoSortable {
 	public var sprite:FlxSprite;
 
 	public var z:Float;
@@ -25,20 +25,20 @@ class IsoSprite extends FlxSprite {
 	public var gridHeight:Float;
 
 	// these give the footprint of the block
-	public var gridXmin(get, never):Float;
-	public var gridXmax(get, never):Float;
-	public var gridYmin(get, never):Float;
-	public var gridYmax(get, never):Float;
-	public var gridZmin(get, never):Float;
-	public var gridZmax(get, never):Float;
+	public var gridXmin:Float;
+	public var gridXmax:Float;
+	public var gridYmin:Float;
+	public var gridYmax:Float;
+	public var gridZmin:Float;
+	public var gridZmax:Float;
 
 	// these give the screenspace occupied by the block
-	public var isoXmin(get, never):Float;
-	public var isoXmax(get, never):Float;
-	public var isoYmin(get, never):Float;
-	public var isoYmax(get, never):Float;
-	public var hMin(get, never):Float;
-	public var hMax(get, never):Float;
+	public var isoXmin:Float;
+	public var isoXmax:Float;
+	public var isoYmin:Float;
+	public var isoYmax:Float;
+	public var hMin:Float;
+	public var hMax:Float;
 
 	public function new(X:Float = 0, Y:Float = 0) {
 		super(X, Y);
@@ -64,51 +64,51 @@ class IsoSprite extends FlxSprite {
 		FlxG.debugger.drawDebug = dbgDraw;
 	}
 
-	function get_gridXmin():Float {
+	public function get_gridXmin():Float {
 		return x + adjust;
 	}
 
-	function get_gridXmax():Float {
+	public function get_gridXmax():Float {
 		return x + (gridWidth * Grid.CELL_SIZE) - adjust;
 	}
 
-	function get_gridYmin():Float {
+	public function get_gridYmin():Float {
 		return y + adjust;
 	}
 
-	function get_gridYmax():Float {
+	public function get_gridYmax():Float {
 		return y + (gridLength * Grid.CELL_SIZE) - adjust;
 	}
 
-	function get_gridZmin():Float {
+	public function get_gridZmin():Float {
 		return z + adjust;
 	}
 
-	function get_gridZmax():Float {
+	public function get_gridZmax():Float {
 		return z + gridHeight * Grid.CELL_SIZE - adjust;
 	}
 
-	function get_isoXmin():Float {
+	public function get_isoXmin():Float {
 		return x - gridHeight * Grid.CELL_SIZE - z;
 	}
 
-	function get_isoXmax():Float {
+	public function get_isoXmax():Float {
 		return x + gridWidth * Grid.CELL_SIZE - z;
 	}
 
-	function get_isoYmin():Float {
+	public function get_isoYmin():Float {
 		return y - gridHeight * Grid.CELL_SIZE - z;
 	}
 
-	function get_isoYmax():Float {
+	public function get_isoYmax():Float {
 		return y + gridLength * Grid.CELL_SIZE - z;
 	}
 
-	function get_hMin():Float {
+	public function get_hMin():Float {
 		return Grid.gridToIso(x, y + gridLength * Grid.CELL_SIZE).x;
 	}
 
-	function get_hMax():Float {
+	public function get_hMax():Float {
 		return Grid.gridToIso(x + gridWidth * Grid.CELL_SIZE, y).x;
 	}
 

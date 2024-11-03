@@ -100,7 +100,7 @@ class Topographic extends FlxBasic {
 				}
 
 				if (Overlap.doSpritesOverlapInIsoSpace(node.object, n.object)) {
-					if (Overlap.isSpriteInFront(n.object, node.object)) {
+					if (Overlap.isInFront(n.object, node.object)) {
 						node.children.push(n);
 						n.parents.push(node);
 					}
@@ -141,10 +141,10 @@ class TNode {
 	}
 
 	public function draw() {
+		// Need to traverse this graph more intelligently
+		// to avoid drawing things multiple times
 		object.draw();
 		for (c in children) {
-			// This may not work properly. Need to traverse this graph more intelligently
-			// to avoid drawing things early
 			c.draw();
 		}
 	}

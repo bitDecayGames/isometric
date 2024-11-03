@@ -60,6 +60,15 @@ class PlayState extends FlxState {
 		shadow = new SquareShadow(floater);
 		add(shadow);
 
+		#if render_debug
+		cube.sprite.alpha = 0.2;
+		blade.sprite.alpha = 0.2;
+		longY.sprite.alpha = 0.2;
+		longX.sprite.alpha = 0.2;
+		extraLongX.sprite.alpha = 0.2;
+		floater.sprite.alpha = 0.2;
+		#end
+
 		// blade.immovable = true;
 		// longY.immovable = true;
 		// longX.immovable = true;
@@ -194,9 +203,9 @@ class PlayState extends FlxState {
 
 	function isoSort(order:Int, a:IsoSprite, b:IsoSprite):Int {
 		if (Overlap.doSpritesOverlapInIsoSpace(a, b)) {
-			if (Overlap.isSpriteInFront(a, b)) {
+			if (Overlap.isInFront(a, b)) {
 				return 1;
-			} else if (Overlap.isSpriteInFront(b, a)) {
+			} else if (Overlap.isInFront(b, a)) {
 				return -1;
 			} else {
 				return 0;
