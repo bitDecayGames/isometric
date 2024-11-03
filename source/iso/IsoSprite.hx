@@ -24,22 +24,6 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 	public var gridLength:Float;
 	public var gridHeight:Float;
 
-	// these give the footprint of the block
-	public var gridXmin:Float;
-	public var gridXmax:Float;
-	public var gridYmin:Float;
-	public var gridYmax:Float;
-	public var gridZmin:Float;
-	public var gridZmax:Float;
-
-	// these give the screenspace occupied by the block
-	public var isoXmin:Float;
-	public var isoXmax:Float;
-	public var isoYmin:Float;
-	public var isoYmax:Float;
-	public var hMin:Float;
-	public var hMax:Float;
-
 	public function new(X:Float = 0, Y:Float = 0) {
 		super(X, Y);
 
@@ -115,26 +99,26 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 	public function debugDraw(i:Int, color:FlxColor) {
 		var start = FlxPoint.get();
 		var end = FlxPoint.get();
-		Grid.gridToIso(gridXmin, -i, start);
-		Grid.gridToIso(gridXmax, -i, end);
+		Grid.gridToIso(get_gridXmin(), -i, start);
+		Grid.gridToIso(get_gridXmax(), -i, end);
 		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
-		Grid.gridToIso(-i, gridYmin, start);
-		Grid.gridToIso(-i, gridYmax, end);
+		Grid.gridToIso(-i, get_gridYmin(), start);
+		Grid.gridToIso(-i, get_gridYmax(), end);
 		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
-		Grid.gridToIso(isoXmin, -i, start);
-		Grid.gridToIso(isoXmax, -i, end);
+		Grid.gridToIso(get_isoXmin(), -i, start);
+		Grid.gridToIso(get_isoXmax(), -i, end);
 		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
-		Grid.gridToIso(-i, isoYmin, start);
-		Grid.gridToIso(-i, isoYmax, end);
+		Grid.gridToIso(-i, get_isoYmin(), start);
+		Grid.gridToIso(-i, get_isoYmax(), end);
 		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
 		start.put();
 		end.put();
 
-		DebugDraw.ME.drawWorldLine(hMin, -i, hMax, -i, null, color);
+		DebugDraw.ME.drawWorldLine(get_hMin(), -i, get_hMax(), -i, null, color);
 	}
 
 	public function centerPoint(?p:FlxPoint) {
