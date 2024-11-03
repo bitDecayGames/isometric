@@ -141,6 +141,6 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 		if (p == null) {
 			p = FlxPoint.get();
 		}
-		return p.set(isoXmin + ((isoXmax - isoXmin) / 2), isoYmin + ((isoYmax - isoYmin) / 2));
+		return p.set(get_isoXmin() + ((get_isoXmax() - get_isoXmin()) / 2), get_isoYmin() + ((get_isoYmax() - get_isoYmin()) / 2));
 	}
 }

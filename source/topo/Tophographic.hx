@@ -113,6 +113,8 @@ class Topographic extends FlxBasic {
 				rootNodes.push(node);
 			}
 		}
+
+		// TODO: Traverse our tree and remove cycles
 	}
 }
 
