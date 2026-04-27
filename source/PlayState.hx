@@ -1,6 +1,6 @@
 package;
 
-import bitdecay.flixel.debug.DebugDraw;
+import bitdecay.flixel.debug.tools.draw.DebugDraw;
 import debug.Debug;
 import debug.DebugLayers;
 import entities.Blade;
