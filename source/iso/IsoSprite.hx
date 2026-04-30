@@ -117,24 +117,24 @@ class IsoSprite extends FlxSprite {
 		var end = FlxPoint.get();
 		Grid.gridToIso(gridXmin, -i, start);
 		Grid.gridToIso(gridXmax, -i, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
 		Grid.gridToIso(-i, gridYmin, start);
 		Grid.gridToIso(-i, gridYmax, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
 		Grid.gridToIso(isoXmin, -i, start);
 		Grid.gridToIso(isoXmax, -i, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
 		Grid.gridToIso(-i, isoYmin, start);
 		Grid.gridToIso(-i, isoYmax, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
 		start.put();
 		end.put();
 
-		DebugDraw.ME.drawWorldLine(hMin, -i, hMax, -i, null, color);
+		DS.get(DebugDraw).drawWorldLine(hMin, -i, hMax, -i, null, color);
 	}
 
 	public function centerPoint(?p:FlxPoint) {

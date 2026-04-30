@@ -58,13 +58,13 @@ class Topographic extends FlxBasic {
 
 		var p = n.object.centerPoint();
 		Grid.gridToIso(p.x, p.y, p);
-		DebugDraw.ME.drawWorldCircle(p.x, p.y, size, DebugLayers.GRAPH, color);
+		DS.get(DebugDraw).drawWorldCircle(p.x, p.y, size, DebugLayers.GRAPH, color);
 
 		var t = FlxPoint.get();
 		for (c in n.children) {
 			c.object.centerPoint(t);
 			Grid.gridToIso(t.x, t.y, t);
-			DebugDraw.ME.drawWorldLine(p.x, p.y, t.x, t.y, DebugLayers.GRAPH, color);
+			DS.get(DebugDraw).drawWorldLine(p.x, p.y, t.x, t.y, DebugLayers.GRAPH, color);
 
 			// var arrowHead = FlxPoint.get().copyFrom(t).subtractPoint(p).rightNormal().pivotDegrees(t, 45).addPoint(t);
 			var arrowHead = FlxPoint.get()
@@ -77,7 +77,7 @@ class Topographic extends FlxBasic {
 
 			drawGraphBranch(c, color.getDarkened(.1), Math.max(0, size - 0.5));
 			// draw last so it is on top of the children circles
-			DebugDraw.ME.drawWorldLine(t.x, t.y, arrowHead.x, arrowHead.y, DebugLayers.GRAPH, FlxColor.WHITE);
+			DS.get(DebugDraw).drawWorldLine(t.x, t.y, arrowHead.x, arrowHead.y, DebugLayers.GRAPH, FlxColor.WHITE);
 		}
 	}
 

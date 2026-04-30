@@ -1,9 +1,10 @@
 package;
 
-import bitdecay.flixel.debug.tools.draw.DebugDraw;
+import bitdecay.flixel.debug.DebugSuite;
 import debug.DebugLayers;
 import flixel.FlxG;
 import flixel.FlxGame;
+import macros.EnumAbstract;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
@@ -23,7 +24,7 @@ class Main extends Sprite {
 		#if FLX_DEBUG
 		FlxG.debugger.visible = true;
 		#end
-		// TODO Is this still needed?
-		// DebugDraw.init(Type.allEnums(DebugLayers));
+
+		DebugSuite.init(new DebugDraw(EnumAbstract.list(DebugLayers)));
 	}
 }

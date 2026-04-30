@@ -43,21 +43,21 @@ class Grid {
 		for (i in 0...xs) {
 			start.set(i * Grid.CELL_SIZE, 0);
 			end.set(i * Grid.CELL_SIZE, 50);
-			DebugDraw.ME.drawWorldLine(Debug.dbgCam, start.x, start.y, end.x, end.y, DebugLayers.SQUARE_GRID, FlxColor.CYAN);
+			DS.get(DebugDraw).drawWorldLine(Debug.dbgCam, start.x, start.y, end.x, end.y, DebugLayers.SQUARE_GRID, FlxColor.CYAN);
 
 			Grid.gridToIso(i * Grid.CELL_SIZE, 0, start);
 			Grid.gridToIso(i * Grid.CELL_SIZE, 50, end);
-			DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_GRID);
+			DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_GRID);
 		}
 
 		for (i in 0...ys) {
 			start.set(0, i * Grid.CELL_SIZE);
 			end.set(50, i * Grid.CELL_SIZE);
-			DebugDraw.ME.drawWorldLine(Debug.dbgCam, start.x, start.y, end.x, end.y, DebugLayers.SQUARE_GRID, FlxColor.CYAN);
+			DS.get(DebugDraw).drawWorldLine(Debug.dbgCam, start.x, start.y, end.x, end.y, DebugLayers.SQUARE_GRID, FlxColor.CYAN);
 
 			Grid.gridToIso(0, i * Grid.CELL_SIZE, start);
 			Grid.gridToIso(50, i * Grid.CELL_SIZE, end);
-			DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_GRID);
+			DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_GRID);
 		}
 
 		start.put();
