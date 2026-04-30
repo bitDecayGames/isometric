@@ -11,7 +11,7 @@ import flixel.util.FlxColor;
 class IsoSprite extends FlxSprite {
 	public var sprite:FlxSprite;
 
-	public var z:Float;
+	public var z:Float = 0;
 
 	// an adjustment modifier when computing
 	// grid size to ensure rendering is nice.
@@ -52,7 +52,10 @@ class IsoSprite extends FlxSprite {
 	}
 
 	override function draw() {
+		// Only draw 2d representation in debug
+		#if FLX_DEBUG
 		super.draw();
+		#end
 
 		// iso renders based on the bottom left corner
 		var tmp = Grid.gridToIso(x + width - z, y + height - z);
