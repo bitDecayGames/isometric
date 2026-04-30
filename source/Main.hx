@@ -1,9 +1,10 @@
 package;
 
-import bitdecay.flixel.debug.DebugDraw;
+import bitdecay.flixel.debug.DebugSuite;
 import debug.DebugLayers;
 import flixel.FlxG;
 import flixel.FlxGame;
+import macros.EnumAbstract;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
@@ -17,12 +18,13 @@ class Main extends Sprite {
 		width *= 2;
 		#end
 
-		addChild(new FlxGame(width, height, PlayState));
+		addChild(new FlxGame(width, height, PlayState, 60, 60, true));
 
 		FlxG.autoPause = false;
 		#if FLX_DEBUG
 		FlxG.debugger.visible = true;
 		#end
-		DebugDraw.init(Type.allEnums(DebugLayers));
+
+		DebugSuite.init(new DebugDraw(EnumAbstract.list(DebugLayers)));
 	}
 }

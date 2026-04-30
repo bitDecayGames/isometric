@@ -1,6 +1,5 @@
 package iso;
 
-import bitdecay.flixel.debug.DebugDraw;
 import debug.Debug;
 import debug.DebugLayers;
 import flixel.FlxG;
@@ -11,7 +10,7 @@ import flixel.util.FlxColor;
 class IsoSprite extends FlxSprite {
 	public var sprite:FlxSprite;
 
-	public var z:Float;
+	public var z:Float = 0;
 
 	// an adjustment modifier when computing
 	// grid size to ensure rendering is nice.
@@ -52,7 +51,10 @@ class IsoSprite extends FlxSprite {
 	}
 
 	override function draw() {
+		// Only draw 2d representation in debug
+		#if FLX_DEBUG
 		super.draw();
+		#end
 
 		// iso renders based on the bottom left corner
 		var tmp = Grid.gridToIso(x + width - z, y + height - z);
@@ -117,24 +119,24 @@ class IsoSprite extends FlxSprite {
 		var end = FlxPoint.get();
 		Grid.gridToIso(gridXmin, -i, start);
 		Grid.gridToIso(gridXmax, -i, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
 		Grid.gridToIso(-i, gridYmin, start);
 		Grid.gridToIso(-i, gridYmax, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
 		Grid.gridToIso(isoXmin, -i, start);
 		Grid.gridToIso(isoXmax, -i, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
 		Grid.gridToIso(-i, isoYmin, start);
 		Grid.gridToIso(-i, isoYmax, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
 		start.put();
 		end.put();
 
-		DebugDraw.ME.drawWorldLine(hMin, -i, hMax, -i, null, color);
+		DS.get(DebugDraw).drawWorldLine(hMin, -i, hMax, -i, null, color);
 	}
 
 	public function centerPoint(?p:FlxPoint) {
