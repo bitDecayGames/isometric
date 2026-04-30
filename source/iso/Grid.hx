@@ -1,6 +1,5 @@
 package iso;
 
-import bitdecay.flixel.debug.tools.draw.DebugDraw;
 import debug.Debug;
 import debug.DebugLayers;
 import flixel.math.FlxPoint;

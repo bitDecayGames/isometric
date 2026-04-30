@@ -1,6 +1,5 @@
 package topo;
 
-import bitdecay.flixel.debug.tools.draw.DebugDraw;
 import debug.DebugLayers;
 import flixel.FlxBasic;
 import flixel.FlxG;

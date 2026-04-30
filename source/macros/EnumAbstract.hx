@@ -5,6 +5,9 @@ import haxe.macro.Expr;
 
 using haxe.macro.Tools;
 
+/*
+ * TODO Move to flixelutils, update template repo
+ */
 class EnumAbstract {
 	public static macro function list(e:Expr) {
 		return macro $a{

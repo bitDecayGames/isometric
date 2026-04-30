@@ -18,7 +18,7 @@ class Main extends Sprite {
 		width *= 2;
 		#end
 
-		addChild(new FlxGame(width, height, PlayState, 60, 60, false));
+		addChild(new FlxGame(width, height, PlayState, 60, 60, true));
 
 		FlxG.autoPause = false;
 		#if FLX_DEBUG

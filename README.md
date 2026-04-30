@@ -16,3 +16,9 @@ haxelib git --always flixelutils https://github.com/bitDecayGames/flixel-utils
 ```sh
 lime test html5
 ```
+
+w/ debug info & tools
+
+```sh
+lime test html5 -debug
+```
