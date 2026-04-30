@@ -21,7 +21,7 @@ import flixel.util.FlxSort;
 import iso.Grid;
 import iso.IsoSprite;
 import iso.Overlap;
-import topo.Tophographic.Topographic;
+import topo.Topographic.Topographic;
 
 class PlayState extends FlxState {
 	var cube:IsoSprite;
