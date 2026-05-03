@@ -4,20 +4,20 @@ import flixel.FlxObject;
 
 class Overlap {
 	// returns true if blocks overlap on all 3 axes in iso projection space
-	public static function doSpritesOverlapInIsoSpace(a:IsoSprite, b:IsoSprite):Bool {
-		var aXMin = a.isoXmin;
-		var aXMax = a.isoXmax;
-		var aYMin = a.isoYmin;
-		var aYMax = a.isoYmax;
-		var aHMin = a.hMin;
-		var aHMax = a.hMax;
+	public static function doSpritesOverlapInIsoSpace(a:IsoSortable, b:IsoSortable):Bool {
+		var aXMin = a.get_isoXmin();
+		var aXMax = a.get_isoXmax();
+		var aYMin = a.get_isoYmin();
+		var aYMax = a.get_isoYmax();
+		var aHMin = a.get_hMin();
+		var aHMax = a.get_hMax();
 
-		var bXMin = b.isoXmin;
-		var bXMax = b.isoXmax;
-		var bYMin = b.isoYmin;
-		var bYMax = b.isoYmax;
-		var bHMin = b.hMin;
-		var bHMax = b.hMax;
+		var bXMin = b.get_isoXmin();
+		var bXMax = b.get_isoXmax();
+		var bYMin = b.get_isoYmin();
+		var bYMax = b.get_isoYmax();
+		var bHMin = b.get_hMin();
+		var bHMax = b.get_hMax();
 
 		var xOverlap = !(aXMin >= bXMax || bXMin >= aXMax);
 		var yOverlap = !(aYMin >= bYMax || bYMin >= aYMax);
@@ -32,22 +32,28 @@ class Overlap {
 		// 	!(a.hMin >= b.hMax || b.hMin >= a.hMax));
 	}
 
-	public static function isSpriteInFront(a:IsoSprite, b:IsoSprite) {
+	public static function isInFront(a:IsoSortable, b:IsoSortable) {
 		// test for intersection x-axis
 		// (larger x value is in front)
-		var aGXMin = a.gridXmin;
-		var bGXMax = b.gridXmax;
-		if (a.gridXmin >= b.gridXmax) {
+		var aGridXMin = a.get_gridXmin();
+		var aGridXMax = a.get_gridXmax();
+		var bGridXMin = b.get_gridXmin();
+		var bGridXMax = b.get_gridXmax();
+		if (aGridXMin >= bGridXMax) {
 			return true;
-		} else if (b.gridXmin >= a.gridXmax) {
+		} else if (bGridXMin >= aGridXMax) {
 			return false;
 		}
 
 		// test for intersection y-axis
 		// (larger2 y value is in front)
-		if (a.gridYmin >= b.gridYmax) {
+		var aGridYMin = a.get_gridYmin();
+		var aGridYMax = a.get_gridYmax();
+		var bGridYMin = b.get_gridYmin();
+		var bGridYMax = b.get_gridYmax();
+		if (aGridYMin >= bGridYMin) {
 			return true;
-		} else if (b.gridYmin >= a.gridYmax) {
+		} else if (bGridYMin >= aGridYMax) {
 			return false;
 		}
 
@@ -56,13 +62,13 @@ class Overlap {
 
 		// TODO: This doesn't seem to be operating correctly for the floating cube test.
 		// This check should be triggering, but it is not
-		var aGZMin = a.gridZmin;
-		var aGZMax = a.gridZmax;
-		var bGZMin = b.gridZmin;
-		var bGZMax = b.gridZmax;
-		if (a.gridZmin >= b.gridZmax) {
+		var aGZMin = a.get_gridZmin();
+		var aGZMax = a.get_gridZmax();
+		var bGZMin = b.get_gridZmin();
+		var bGZMax = b.get_gridZmax();
+		if (aGZMin >= bGZMax) {
 			return true;
-		} else if (b.gridZmin >= a.gridZmax) {
+		} else if (bGZMin >= aGZMax) {
 			return false;
 		}
 
@@ -71,7 +77,7 @@ class Overlap {
 	}
 
 	public static function isoCollide(a:IsoSprite, b:IsoSprite):Bool {
-		if (a.gridZmax <= b.gridZmin || b.gridZmax <= a.gridZmin) {
+		if (a.get_gridZmax() <= b.get_gridZmin() || b.get_gridZmax() <= a.get_gridZmin()) {
 			// if they don't overlap on the z-axis, they don't collide
 			return false;
 		} else {

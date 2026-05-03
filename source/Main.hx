@@ -1,10 +1,10 @@
 package;
 
-import bitdecay.flixel.debug.DebugDraw;
-import debug.DebugLayers;
+// import bitdecay.flixel.debug.DebugDraw;
 import flixel.FlxG;
 import flixel.FlxGame;
 import openfl.display.Sprite;
+import debug.DebugLayers;
 
 class Main extends Sprite {
 	public function new() {
@@ -23,6 +23,6 @@ class Main extends Sprite {
 		#if FLX_DEBUG
 		FlxG.debugger.visible = true;
 		#end
-		DebugDraw.init(Type.allEnums(DebugLayers));
+		// DebugDraw.init(Type.allEnums(DebugLayers));
 	}
 }

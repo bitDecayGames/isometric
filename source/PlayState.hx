@@ -1,6 +1,6 @@
 package;
 
-import bitdecay.flixel.debug.DebugDraw;
+// import bitdecay.flixel.debug.DebugDraw;
 import debug.Debug;
 import debug.DebugLayers;
 import entities.Blade;
@@ -22,7 +22,7 @@ import flixel.util.FlxSort;
 import iso.Grid;
 import iso.IsoSprite;
 import iso.Overlap;
-import topo.Tophographic.Topographic;
+import iso.topo.Tophographic;
 
 class PlayState extends FlxState {
 	var cube:IsoSprite;
@@ -65,7 +65,7 @@ class PlayState extends FlxState {
 		// longX.immovable = true;
 		// floater.immovable = true;
 
-		graph = new Topographic([]);
+		graph = new Topographic();
 		add(graph);
 		graph.add(cube);
 		graph.add(blade);
@@ -175,8 +175,8 @@ class PlayState extends FlxState {
 		}
 
 		if (mIsoStart.length > 0 && mIsoEnd.length > 0) {
-			DebugDraw.ME.drawWorldLine(mIsoStart.x, mIsoStart.y, mIsoEnd.x, mIsoEnd.y, null, FlxColor.PINK);
-			DebugDraw.ME.drawWorldLine(Debug.dbgCam, mCartStart.x, mCartStart.y, mCartEnd.x, mCartEnd.y, null, FlxColor.PINK);
+			// DebugDraw.ME.drawWorldLine(mIsoStart.x, mIsoStart.y, mIsoEnd.x, mIsoEnd.y, null, FlxColor.PINK);
+			// DebugDraw.ME.drawWorldLine(Debug.dbgCam, mCartStart.x, mCartStart.y, mCartEnd.x, mCartEnd.y, null, FlxColor.PINK);
 			FlxG.watch.addQuick("Line Length (Abs): ", Std.int(mCartStart.distanceTo(mCartEnd) * 100) / 100.0);
 			FlxG.watch.addQuick("Line Length (Cells): ", Std.int(mCartStart.distanceTo(mCartEnd) / Grid.CELL_SIZE * 10) / 10.0);
 		}
@@ -185,18 +185,18 @@ class PlayState extends FlxState {
 		var end = FlxPoint.get();
 		Grid.gridToIso(mTmp.x, -100, start);
 		Grid.gridToIso(mTmp.x, 100, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
 
 		Grid.gridToIso(-100, mTmp.y, start);
 		Grid.gridToIso(100, mTmp.y, end);
-		DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
 	}
 
 	function isoSort(order:Int, a:IsoSprite, b:IsoSprite):Int {
 		if (Overlap.doSpritesOverlapInIsoSpace(a, b)) {
-			if (Overlap.isSpriteInFront(a, b)) {
+			if (Overlap.isInFront(a, b)) {
 				return 1;
-			} else if (Overlap.isSpriteInFront(b, a)) {
+			} else if (Overlap.isInFront(b, a)) {
 				return -1;
 			} else {
 				return 0;
