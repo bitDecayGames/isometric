@@ -1,10 +1,11 @@
 package iso;
 
-// import bitdecay.flixel.debug.DebugDraw;
+#if isodebug
+import debug.Debug;
 import debug.DebugLayers;
+#end
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
-import debug.Debug;
 
 class Grid {
 	// pixels per grid space. This drives the ratio of cartesian movement
@@ -38,6 +39,7 @@ class Grid {
 	}
 
 	public static function drawGrid(xs:Int, ys:Int) {
+		#if isodebug
 		var start = FlxPoint.get();
 		var end = FlxPoint.get();
 		for (i in 0...xs) {
@@ -62,5 +64,6 @@ class Grid {
 
 		start.put();
 		end.put();
+		#end
 	}
 }

@@ -1,8 +1,9 @@
 package iso;
 
-// import bitdecay.flixel.debug.DebugDraw;
+#if isodebug
 import debug.Debug;
 import debug.DebugLayers;
+#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
@@ -30,9 +31,11 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 		// It is critical that your grid size matches well with your `sprite` graphic so collisions feel correct
 		makeGraphic(Math.ceil(gridWidth * Grid.CELL_SIZE), Math.ceil(gridLength * Grid.CELL_SIZE));
 
+		#if isodebug
 		if (Debug.dbgCam != null) {
 			camera = Debug.dbgCam;
 		}
+		#end
 	}
 
 	override function draw() {
