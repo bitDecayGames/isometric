@@ -39,7 +39,10 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 	}
 
 	override function draw() {
+		// Only draw 2d representation in debug
+		#if FLX_DEBUG
 		super.draw();
+		#end
 
 		// iso renders based on the bottom left corner
 		var tmp = Grid.gridToIso(x + width - z, y + height - z);
@@ -100,28 +103,30 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 	}
 
 	public function debugDraw(i:Int, color:FlxColor) {
+		#if isodebug
 		var start = FlxPoint.get();
 		var end = FlxPoint.get();
-		Grid.gridToIso(get_gridXmin(), -i, start);
-		Grid.gridToIso(get_gridXmax(), -i, end);
-		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
+		Grid.gridToIso(gridXmin, -i, start);
+		Grid.gridToIso(gridXmax, -i, end);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
-		Grid.gridToIso(-i, get_gridYmin(), start);
-		Grid.gridToIso(-i, get_gridYmax(), end);
-		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
+		Grid.gridToIso(-i, gridYmin, start);
+		Grid.gridToIso(-i, gridYmax, end);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.GRID_SPACE, color);
 
-		Grid.gridToIso(get_isoXmin(), -i, start);
-		Grid.gridToIso(get_isoXmax(), -i, end);
-		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
+		Grid.gridToIso(isoXmin, -i, start);
+		Grid.gridToIso(isoXmax, -i, end);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
-		Grid.gridToIso(-i, get_isoYmin(), start);
-		Grid.gridToIso(-i, get_isoYmax(), end);
-		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
+		Grid.gridToIso(-i, isoYmin, start);
+		Grid.gridToIso(-i, isoYmax, end);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, DebugLayers.ISO_SPACE, color);
 
 		start.put();
 		end.put();
 
-		// DebugDraw.ME.drawWorldLine(get_hMin(), -i, get_hMax(), -i, null, color);
+		DS.get(DebugDraw).drawWorldLine(hMin, -i, hMax, -i, null, color);
+		#end
 	}
 
 	public function centerPoint(?p:FlxPoint) {

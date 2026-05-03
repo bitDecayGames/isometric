@@ -1,6 +1,5 @@
 package;
 
-// import bitdecay.flixel.debug.DebugDraw;
 import debug.Debug;
 import debug.DebugLayers;
 import entities.Blade;
@@ -175,21 +174,26 @@ class PlayState extends FlxState {
 		}
 
 		if (mIsoStart.length > 0 && mIsoEnd.length > 0) {
-			// DebugDraw.ME.drawWorldLine(mIsoStart.x, mIsoStart.y, mIsoEnd.x, mIsoEnd.y, null, FlxColor.PINK);
-			// DebugDraw.ME.drawWorldLine(Debug.dbgCam, mCartStart.x, mCartStart.y, mCartEnd.x, mCartEnd.y, null, FlxColor.PINK);
+			#if isodebug
+			DS.get(DebugDraw).drawWorldLine(mIsoStart.x, mIsoStart.y, mIsoEnd.x, mIsoEnd.y, null, FlxColor.PINK);
+			DS.get(DebugDraw).drawWorldLine(Debug.dbgCam, mCartStart.x, mCartStart.y, mCartEnd.x, mCartEnd.y, null, FlxColor.PINK);
+			#end
+
 			FlxG.watch.addQuick("Line Length (Abs): ", Std.int(mCartStart.distanceTo(mCartEnd) * 100) / 100.0);
 			FlxG.watch.addQuick("Line Length (Cells): ", Std.int(mCartStart.distanceTo(mCartEnd) / Grid.CELL_SIZE * 10) / 10.0);
 		}
 
+		#if isodebug
 		var start = FlxPoint.get();
 		var end = FlxPoint.get();
 		Grid.gridToIso(mTmp.x, -100, start);
 		Grid.gridToIso(mTmp.x, 100, end);
-		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
 
 		Grid.gridToIso(-100, mTmp.y, start);
 		Grid.gridToIso(100, mTmp.y, end);
-		// DebugDraw.ME.drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+		#end
 	}
 
 	function isoSort(order:Int, a:IsoSprite, b:IsoSprite):Int {
