@@ -1,6 +1,5 @@
 package;
 
-import debug.DebugLayers;
 import entities.Blade;
 import entities.Cube;
 import entities.ExtraLongX;
@@ -21,6 +20,7 @@ import iso.Grid;
 import iso.IsoSprite;
 import iso.Overlap;
 import iso.debug.Debug;
+import iso.debug.DebugLayers;
 import iso.topo.Tophographic;
 
 class PlayState extends FlxState {

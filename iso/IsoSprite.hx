@@ -1,7 +1,7 @@
 package iso;
 
 #if isodebug
-import debug.DebugLayers;
+import iso.debug.DebugLayers;
 import iso.debug.Debug;
 #end
 import flixel.FlxG;

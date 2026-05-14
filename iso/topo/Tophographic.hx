@@ -1,7 +1,7 @@
 package iso.topo;
 
 #if isodebug
-import debug.DebugLayers;
+import iso.debug.DebugLayers;
 #end
 import flixel.FlxBasic;
 import flixel.FlxG;

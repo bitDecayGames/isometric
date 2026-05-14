@@ -2,11 +2,11 @@ package;
 
 #if isodebug
 import bitdecay.flixel.debug.DebugSuite;
-import debug.DebugLayers;
+import iso.debug.DebugLayers;
 #end
-import debug.DebugLayers;
 import flixel.FlxG;
 import flixel.FlxGame;
+import iso.debug.DebugLayers;
 import macros.EnumAbstract;
 import openfl.display.Sprite;
 
