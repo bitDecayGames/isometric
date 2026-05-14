@@ -1,6 +1,5 @@
 package;
 
-import debug.Debug;
 import debug.DebugLayers;
 import entities.Blade;
 import entities.Cube;
@@ -21,6 +20,7 @@ import flixel.util.FlxSort;
 import iso.Grid;
 import iso.IsoSprite;
 import iso.Overlap;
+import iso.debug.Debug;
 import iso.topo.Tophographic;
 
 class PlayState extends FlxState {

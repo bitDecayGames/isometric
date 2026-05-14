@@ -1,8 +1,8 @@
 package iso;
 
 #if isodebug
-import debug.Debug;
 import debug.DebugLayers;
+import iso.debug.Debug;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -24,6 +24,22 @@ class IsoSprite extends FlxSprite implements IsoSortable {
 	public var gridWidth:Float;
 	public var gridLength:Float;
 	public var gridHeight:Float;
+
+	// these give the footprint of the block
+	public var gridXmin(get, never):Float;
+	public var gridXmax(get, never):Float;
+	public var gridYmin(get, never):Float;
+	public var gridYmax(get, never):Float;
+	public var gridZmin(get, never):Float;
+	public var gridZmax(get, never):Float;
+
+	// these give the screenspace occupied by the block
+	public var isoXmin(get, never):Float;
+	public var isoXmax(get, never):Float;
+	public var isoYmin(get, never):Float;
+	public var isoYmax(get, never):Float;
+	public var hMin(get, never):Float;
+	public var hMax(get, never):Float;
 
 	public function new(X:Float = 0, Y:Float = 0) {
 		super(X, Y);

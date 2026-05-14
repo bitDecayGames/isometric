@@ -1,8 +1,8 @@
 package iso;
 
 #if isodebug
-import debug.Debug;
 import debug.DebugLayers;
+import iso.debug.Debug;
 #end
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
