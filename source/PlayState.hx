@@ -1,7 +1,5 @@
 package;
 
-import debug.Debug;
-import debug.DebugLayers;
 import entities.Blade;
 import entities.Cube;
 import entities.ExtraLongX;
@@ -21,7 +19,9 @@ import flixel.util.FlxSort;
 import iso.Grid;
 import iso.IsoSprite;
 import iso.Overlap;
-import topo.Topographic.Topographic;
+import iso.debug.Debug;
+import iso.debug.DebugLayers;
+import iso.topo.Tophographic;
 
 class PlayState extends FlxState {
 	var cube:IsoSprite;
@@ -64,7 +64,7 @@ class PlayState extends FlxState {
 		// longX.immovable = true;
 		// floater.immovable = true;
 
-		graph = new Topographic([]);
+		graph = new Topographic();
 		add(graph);
 		graph.add(cube);
 		graph.add(blade);
@@ -174,12 +174,16 @@ class PlayState extends FlxState {
 		}
 
 		if (mIsoStart.length > 0 && mIsoEnd.length > 0) {
+			#if isodebug
 			DS.get(DebugDraw).drawWorldLine(mIsoStart.x, mIsoStart.y, mIsoEnd.x, mIsoEnd.y, null, FlxColor.PINK);
 			DS.get(DebugDraw).drawWorldLine(Debug.dbgCam, mCartStart.x, mCartStart.y, mCartEnd.x, mCartEnd.y, null, FlxColor.PINK);
+			#end
+
 			FlxG.watch.addQuick("Line Length (Abs): ", Std.int(mCartStart.distanceTo(mCartEnd) * 100) / 100.0);
 			FlxG.watch.addQuick("Line Length (Cells): ", Std.int(mCartStart.distanceTo(mCartEnd) / Grid.CELL_SIZE * 10) / 10.0);
 		}
 
+		#if isodebug
 		var start = FlxPoint.get();
 		var end = FlxPoint.get();
 		Grid.gridToIso(mTmp.x, -100, start);
@@ -189,13 +193,14 @@ class PlayState extends FlxState {
 		Grid.gridToIso(-100, mTmp.y, start);
 		Grid.gridToIso(100, mTmp.y, end);
 		DS.get(DebugDraw).drawWorldLine(start.x, start.y, end.x, end.y, null, FlxColor.WHITE);
+		#end
 	}
 
 	function isoSort(order:Int, a:IsoSprite, b:IsoSprite):Int {
 		if (Overlap.doSpritesOverlapInIsoSpace(a, b)) {
-			if (Overlap.isSpriteInFront(a, b)) {
+			if (Overlap.isInFront(a, b)) {
 				return 1;
-			} else if (Overlap.isSpriteInFront(b, a)) {
+			} else if (Overlap.isInFront(b, a)) {
 				return -1;
 			} else {
 				return 0;

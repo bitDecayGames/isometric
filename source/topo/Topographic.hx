@@ -1,6 +1,5 @@
 package topo;
 
-import debug.DebugLayers;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
@@ -9,6 +8,7 @@ import flixel.util.FlxSort;
 import iso.Grid;
 import iso.IsoSprite;
 import iso.Overlap;
+import iso.debug.DebugLayers;
 
 class Topographic extends FlxBasic {
 	public var objects:Array<IsoSprite>;

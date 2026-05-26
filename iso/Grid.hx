@@ -1,7 +1,9 @@
 package iso;
 
-import debug.Debug;
-import debug.DebugLayers;
+#if isodebug
+import iso.debug.DebugLayers;
+import iso.debug.Debug;
+#end
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 
@@ -37,11 +39,13 @@ class Grid {
 	}
 
 	public static function drawGrid(xs:Int, ys:Int) {
+		#if isodebug
 		var start = FlxPoint.get();
 		var end = FlxPoint.get();
 		for (i in 0...xs) {
 			start.set(i * Grid.CELL_SIZE, 0);
 			end.set(i * Grid.CELL_SIZE, 50);
+
 			DS.get(DebugDraw).drawWorldLine(Debug.dbgCam, start.x, start.y, end.x, end.y, DebugLayers.SQUARE_GRID, FlxColor.CYAN);
 
 			Grid.gridToIso(i * Grid.CELL_SIZE, 0, start);
@@ -52,6 +56,7 @@ class Grid {
 		for (i in 0...ys) {
 			start.set(0, i * Grid.CELL_SIZE);
 			end.set(50, i * Grid.CELL_SIZE);
+
 			DS.get(DebugDraw).drawWorldLine(Debug.dbgCam, start.x, start.y, end.x, end.y, DebugLayers.SQUARE_GRID, FlxColor.CYAN);
 
 			Grid.gridToIso(0, i * Grid.CELL_SIZE, start);
@@ -61,5 +66,6 @@ class Grid {
 
 		start.put();
 		end.put();
+		#end
 	}
 }

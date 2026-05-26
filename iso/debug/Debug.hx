@@ -1,4 +1,4 @@
-package debug;
+package iso.debug;
 
 import flixel.FlxCamera;
 
