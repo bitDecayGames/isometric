@@ -1,0 +1,12 @@
+{
+	"name" : "isometric",
+	"url" : "https://github.com/bitDecayGames/isometric",
+	"license" : "MIT",
+	"tags": [""],
+	
+    "description" : "Isometric render library",
+    "version" : "0.1.0-alpha",
+	"releasenote" : "Initial attempt",
+	"contributors" : ["MondayHopscotch"],
+	"dependencies" : {}
+}
